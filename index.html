@@ -69,6 +69,10 @@
   .bulbo-glow{transition:opacity .6s ease}
   @keyframes brilho{0%,100%{opacity:.1}50%{opacity:.28}}
   body.aceso .bulbo-glow{animation:brilho 1.8s ease-in-out infinite}
+  .opt-visual{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;border:2px solid transparent;cursor:pointer}
+  .opt-visual:has(input:checked){border-color:var(--azul2);background:#eef6fc}
+  .opt-lamp{width:34px;height:44px;object-fit:contain;border-radius:50%}
+  .opt-chave{width:52px;height:36px}
   .foto{display:block;width:100%;max-height:150px;object-fit:contain;border-radius:8px;background:#fff;margin-bottom:6px}
 </style>
 </head>
@@ -204,16 +208,16 @@
         <div class="item" id="item-q2a">
           <h4>Com a chave <u>aberta</u>, a lâmpada acende?</h4>
           <div class="opts">
-            <label><input type="radio" name="q2a" value="sim"> Sim</label>
-            <label><input type="radio" name="q2a" value="nao"> Não</label>
+            <label class="opt-visual"><input type="radio" name="q2a" value="sim"> Sim <img class="opt-lamp" data-lamp="on" alt="lâmpada acesa"></label>
+            <label class="opt-visual"><input type="radio" name="q2a" value="nao"> Não <img class="opt-lamp" data-lamp="off" alt="lâmpada apagada"></label>
           </div>
           <div class="feedback" id="fb-q2a"></div>
         </div>
         <div class="item" id="item-q2b">
           <h4>Com a chave <u>fechada</u>, o circuito está:</h4>
           <div class="opts">
-            <label><input type="radio" name="q2b" value="aberto"> Aberto</label>
-            <label><input type="radio" name="q2b" value="fechado"> Fechado</label>
+            <label class="opt-visual"><input type="radio" name="q2b" value="aberto"> Aberto <svg class="opt-chave" viewBox="0 0 60 40" aria-hidden="true"><circle cx="10" cy="20" r="3.5" fill="#1f4e79"/><circle cx="50" cy="20" r="3.5" fill="#1f4e79"/><line x1="10" y1="20" x2="44" y2="6" stroke="#1f4e79" stroke-width="4" stroke-linecap="round"/></svg></label>
+            <label class="opt-visual"><input type="radio" name="q2b" value="fechado"> Fechado <svg class="opt-chave" viewBox="0 0 60 40" aria-hidden="true"><circle cx="10" cy="20" r="3.5" fill="#1f4e79"/><circle cx="50" cy="20" r="3.5" fill="#1f4e79"/><line x1="10" y1="20" x2="50" y2="20" stroke="#1f4e79" stroke-width="4" stroke-linecap="round"/></svg></label>
           </div>
           <div class="feedback" id="fb-q2b"></div>
         </div>
@@ -542,6 +546,16 @@
     nomeSel.disabled = !turma;
   }
   document.getElementById("turma-sel").addEventListener("change", carregarAlunos);
+
+  /* ---------- IMAGENS NAS ALTERNATIVAS (Exercício 2) ---------- */
+  function preencherImagensOpcoes() {
+    const onSrc = document.querySelector("#lampada-central .lamp-on")?.getAttribute("href");
+    const offSrc = document.querySelector("#lampada-central .lamp-off")?.getAttribute("href");
+    document.querySelectorAll("img.opt-lamp").forEach(img => {
+      img.src = img.dataset.lamp === "on" ? onSrc : offSrc;
+    });
+  }
+  preencherImagensOpcoes();
 
   /* ---------- INICIALIZAÇÃO ---------- */
   renderAparelhos();
