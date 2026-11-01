@@ -231,9 +231,7 @@
       <h3><span class="num">3</span> Complete as frases</h3>
       <p>Use as palavras do quadro para completar.</p>
       <p style="text-align:center;margin:8px 0 14px">
-        <span style="background:#eaf4fb;border:2px solid var(--azul2);color:var(--azul);font-weight:800;padding:6px 14px;border-radius:10px">
-          corrente elétrica – fechado – aberto – lâmpada
-        </span>
+        <span id="quadro-palavras" style="background:#eaf4fb;border:2px solid var(--azul2);color:var(--azul);font-weight:800;padding:6px 14px;border-radius:10px"></span>
       </p>
       <ol class="frases" id="lista-frases"></ol>
     </div>
@@ -307,13 +305,27 @@
   const compCorretos = { A: "bateria", B: "lampada", C: "chave", D: "fios" };
   const NOMES_COMP = { bateria: "pilha ou bateria", lampada: "lâmpada", chave: "chave", fios: "fios" };
 
+  // Embaralha (Fisher-Yates) garantindo ordem diferente da original
+  function embaralhar(lista) {
+    const original = lista.join("|");
+    let r;
+    do {
+      r = [...lista];
+      for (let i = r.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [r[i], r[j]] = [r[j], r[i]];
+      }
+    } while (r.join("|") === original && lista.length > 1);
+    return r;
+  }
+
   const frases = [
     { pre: "Em um circuito",                                     pos: ", a corrente elétrica consegue circular.", certo: "fechado" },
     { pre: "Quando o caminho está interrompido, o circuito está", pos: ".",                                        certo: "aberto" },
     { pre: "A",                                                  pos: "acende quando a energia elétrica circula pelo circuito.", certo: "lâmpada" },
     { pre: "O movimento da energia no circuito é chamado de",    pos: ".",                                        certo: "corrente elétrica" }
   ];
-  const banco = ["corrente elétrica", "fechado", "aberto", "lâmpada"];
+  const banco = embaralhar(["corrente elétrica", "fechado", "aberto", "lâmpada"]);
   const letras = ["a", "b", "c", "d"];
 
   /* ---------- DESENHO DOS COMPONENTES (orientação horizontal; os slots A e D são girados) ---------- */
@@ -342,6 +354,15 @@
         </div>
         <div class="feedback" id="ap-fb-${i}"></div>
       </div>`).join("");
+  }
+
+  // Cor imediata: verde se a palavra está certa, vermelha se está errada
+  function colorirFrase(i) {
+    const item = document.getElementById("fr-item-" + i);
+    const v = document.querySelector(`select[name="fr${i}"]`).value;
+    item.classList.remove("ok", "erro");
+    if (!v) return;
+    item.classList.add(v === frases[i].certo ? "ok" : "erro");
   }
 
   function renderFrases() {
@@ -583,6 +604,9 @@
   /* ---------- INICIALIZAÇÃO ---------- */
   renderAparelhos();
   renderFrases();
+  document.getElementById("quadro-palavras").textContent = banco.join(" – ");
+  document.querySelectorAll('select[name^="fr"]').forEach((sel, i) =>
+    sel.addEventListener("change", () => colorirFrase(i)));
   carregarSalvos();
   document.getElementById("btn-verificar").addEventListener("click", verificar);
   document.getElementById("btn-refazer").addEventListener("click", refazer);
