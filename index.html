@@ -66,6 +66,9 @@
   .cotidiano p{margin:0 0 6px;font-weight:600}
   .aviso{font-size:.85rem;color:#5a6b78;margin-top:6px}
   .lamp-on,.lamp-off{transition:opacity .4s ease}
+  .bulbo-glow{transition:opacity .6s ease}
+  @keyframes brilho{0%,100%{opacity:.45}50%{opacity:.9}}
+  body.aceso .bulbo-glow{animation:brilho 1.8s ease-in-out infinite}
   .foto{display:block;width:100%;max-height:150px;object-fit:contain;border-radius:8px;background:#fff;margin-bottom:6px}
 </style>
 </head>
@@ -398,6 +401,7 @@
     document.querySelectorAll(".lamp-off").forEach(c => c.setAttribute("opacity", e.acesa ? "0" : "1"));
 
 
+    document.body.classList.toggle("aceso", e.acesa);
     svg.classList.toggle("ligado", e.acesa);
 
     document.getElementById("st-chave").textContent = !e.temChave ? "sem chave no circuito" : (chaveFechada ? "fechada" : "aberta");
