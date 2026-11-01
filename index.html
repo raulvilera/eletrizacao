@@ -559,6 +559,16 @@
   }
   preencherImagensOpcoes();
 
+  /* ---------- DATA AUTOMÁTICA (hoje, editável) ---------- */
+  (function preencherData() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, "0");
+    const campo = document.getElementById("data");
+    if (campo && !campo.value) {
+      campo.value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+  })();
+
   /* ---------- INICIALIZAÇÃO ---------- */
   renderAparelhos();
   renderFrases();
