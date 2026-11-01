@@ -408,9 +408,7 @@
     document.querySelectorAll("#circuito .lamp-on").forEach(c => c.setAttribute("opacity", e.acesa ? "1" : "0"));
     document.querySelectorAll("#circuito .lamp-off").forEach(c => c.setAttribute("opacity", e.acesa ? "0" : "1"));
     // lâmpada ao lado do botão: acompanha a chave (fechada = acesa)
-    document.querySelectorAll("#lampada-painel .lamp-on").forEach(c => c.setAttribute("opacity", chaveFechada ? "1" : "0"));
-    document.querySelectorAll("#lampada-painel .lamp-off").forEach(c => c.setAttribute("opacity", chaveFechada ? "0" : "1"));
-    document.querySelectorAll("#lampada-painel .bulbo-glow").forEach(c => c.setAttribute("opacity", chaveFechada ? "0.8" : "0"));
+    mostrarLampadaPainel(chaveFechada);
 
 
     document.body.classList.toggle("aceso", e.acesa);
@@ -429,11 +427,24 @@
     btnChave.textContent = chaveFechada ? "Abrir chave" : "Fechar chave";
   }
 
+  // lâmpada ao lado do botão: acesa ou apagada
+  function mostrarLampadaPainel(acesa) {
+    document.querySelectorAll("#lampada-painel .lamp-on").forEach(c => c.setAttribute("opacity", acesa ? "1" : "0"));
+    document.querySelectorAll("#lampada-painel .lamp-off").forEach(c => c.setAttribute("opacity", acesa ? "0" : "1"));
+    document.querySelectorAll("#lampada-painel .bulbo-glow").forEach(c => c.setAttribute("opacity", acesa ? "0.8" : "0"));
+  }
+
   function setChave(fechada) {
     chaveFechada = fechada;
     atualizarCircuito();
   }
   btnChave.addEventListener("click", () => setChave(!chaveFechada));
+
+  // Exercício 2: a escolha nas alternativas aparece na lâmpada de cima
+  document.querySelectorAll('input[name="q2a"]').forEach(r =>
+    r.addEventListener("change", () => mostrarLampadaPainel(r.value === "sim")));
+  document.querySelectorAll('input[name="q2b"]').forEach(r =>
+    r.addEventListener("change", () => setChave(r.value === "fechado")));
 
   document.querySelectorAll('select[name^="comp-"]').forEach(s =>
     s.addEventListener("change", atualizarCircuito));
