@@ -398,8 +398,13 @@
     });
 
     document.querySelectorAll(".bulbo-glow").forEach(c => c.setAttribute("opacity", e.acesa ? "0.8" : "0"));
-    document.querySelectorAll(".lamp-on").forEach(c => c.setAttribute("opacity", e.acesa ? "1" : "0"));
-    document.querySelectorAll(".lamp-off").forEach(c => c.setAttribute("opacity", e.acesa ? "0" : "1"));
+    // lâmpada do circuito: acende só com o circuito completo
+    document.querySelectorAll("#circuito .lamp-on").forEach(c => c.setAttribute("opacity", e.acesa ? "1" : "0"));
+    document.querySelectorAll("#circuito .lamp-off").forEach(c => c.setAttribute("opacity", e.acesa ? "0" : "1"));
+    // lâmpada ao lado do botão: acompanha a chave (fechada = acesa)
+    document.querySelectorAll("#lampada-painel .lamp-on").forEach(c => c.setAttribute("opacity", chaveFechada ? "1" : "0"));
+    document.querySelectorAll("#lampada-painel .lamp-off").forEach(c => c.setAttribute("opacity", chaveFechada ? "0" : "1"));
+    document.querySelectorAll("#lampada-painel .bulbo-glow").forEach(c => c.setAttribute("opacity", chaveFechada ? "0.8" : "0"));
 
 
     document.body.classList.toggle("aceso", e.acesa);
